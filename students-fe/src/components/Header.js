@@ -14,7 +14,7 @@ class Header extends Component {
         <h5>
           <i>Workation</i>
         </h5>
-        <h1>Kombiner arbejde og ferie</h1>
+        <h1>Kombiner arbejde og ferie i de smukkeste omgivelser</h1>
       </div>
     );
   }
