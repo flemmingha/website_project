@@ -47,6 +47,17 @@ steps:
   displayName: 'Install prerequisites'
 
 - script: |
+      mkdir $(venv)
+      $(buildPython.pythonLocation)\python -m virtualenv $(venv)
+    displayName: setup virtual environment
+  - script: |
+      call $(venv)\Scripts\activate.bat
+      echo "This is really bad."
+      echo "A big error has occurred!!"
+      exit 45
+    displayName: setup virtual environment
+
+- script: |
     pushd '$(projectRoot)'
     python manage.py test --testrunner xmlrunner.extra.djangotestrunner.XMLTestRunner --no-input
   displayName: 'Run tests'
