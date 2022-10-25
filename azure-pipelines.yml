@@ -42,20 +42,9 @@ steps:
 
 - script: |
     python -m pip install --upgrade pip setuptools wheel
-    pip install -r requirements.txt
+    pip install --target="$(workingDirectory)/.python_packages/lib/site-packages" -r requirements.txt
     pip install unittest-xml-reporting
   displayName: 'Install prerequisites'
-
-- script: |
-      mkdir $(venv)
-      $(buildPython.pythonLocation)\python -m virtualenv $(venv)
-    displayName: setup virtual environment
-  - script: |
-      call $(venv)\Scripts\activate.bat
-      echo "This is really bad."
-      echo "A big error has occurred!!"
-      exit 45
-    displayName: setup virtual environment
 
 - script: |
     pushd '$(projectRoot)'
