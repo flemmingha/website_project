@@ -41,12 +41,12 @@ steps:
       print('##vso[task.setvariable variable=projectRoot]{}'.format(project_location))
 
 - script: |
-      mkdir $(venv)
-      $(buildPython.pythonLocation)\python -m virtualenv $(venv)
+      mkdir $(workingDirectory)/web_env
+      python -m virtualenv $(workingDirectory)/web_env
   displayName: 'setup virtual environment'
 
 - script: |
-      call $(venv)\Scripts\activate.bat
+      call $(workingDirectory)\web_env\Scripts\activate.bat
       echo "This is really bad."
       echo "A big error has occurred!!"
       exit 45
