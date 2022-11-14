@@ -40,15 +40,14 @@ steps:
       print('Found Django project in', project_location)
       print('##vso[task.setvariable variable=projectRoot]{}'.format(project_location))
 
-  variables:
-    venv: $(System.DefaultWorkingDirectory)\web_env
-  steps:
   - script: $(buildPython.pythonLocation)\python -m pip install --upgrade setuptools virtualenv wheel
     displayName: install python basics
+
   - script: |
-      mkdir $(venv)
-      $(buildPython.pythonLocation)\python -m virtualenv $(venv)
+      mkdir $(System.DefaultWorkingDirectory)\web_env
+      $(buildPython.pythonLocation)\python -m virtualenv $(System.DefaultWorkingDirectory)\web_env
     displayName: set up the virtual environment
+
   - script: |
       set Path=$(venv)\Scripts;%Path%
       echo "We're in a virtual environment!"
@@ -56,7 +55,7 @@ steps:
     displayName: do things in the virtual environment
     env:
       PYTHON_HOME: ""
-      VIRTUAL_ENV: $(venv)
+      VIRTUAL_ENV: $(System.DefaultWorkingDirectory)\web_env
 
 - script: |
     python -m pip install --upgrade pip setuptools wheel
