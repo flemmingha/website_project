@@ -40,17 +40,17 @@ steps:
       print('Found Django project in', project_location)
       print('##vso[task.setvariable variable=projectRoot]{}'.format(project_location))
 
-- script: |
-      mkdir $(workingDirectory)/test
-      python -m venv $(workingDirectory)/test
-  displayName: 'setup virtual environment'
+#- script: |
+#      mkdir $(workingDirectory)/web_env
+#      python -m venv $(workingDirectory)/web_env
+#  displayName: 'setup virtual environment'
 
-- script: |
-      call $(workingDirectory)\web_env\Scripts\activate.bat
-      echo "This is really bad."
-      echo "A big error has occurred!!"
-      exit 45
-  displayName: setup virtual environment
+#- script: |
+#      call $(workingDirectory)\web_env\Scripts\activate.bat
+#      echo "This is really bad."
+#      echo "A big error has occurred!!"
+#      exit 45
+#  displayName: setup virtual environment
 
 - script: |
     python -m pip install --upgrade pip setuptools wheel
