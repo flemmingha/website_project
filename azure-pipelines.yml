@@ -40,8 +40,8 @@ steps:
       print('Found Django project in', project_location)
       print('##vso[task.setvariable variable=projectRoot]{}'.format(project_location))
 
-  - script: $(buildPython.pythonLocation)\python -m pip install --upgrade setuptools virtualenv wheel
-    displayName: install python basics
+  #- script: $(buildPython.pythonLocation)\python -m pip install --upgrade setuptools virtualenv wheel
+  #  displayName: install python basics
 
   - script: |
       mkdir $(System.DefaultWorkingDirectory)\web_env
