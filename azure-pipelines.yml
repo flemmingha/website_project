@@ -42,7 +42,7 @@ steps:
 
 - script: |
       mkdir $(workingDirectory)/web_env
-      python -m virtualenv $(workingDirectory)/web_env
+      python -m venv $(workingDirectory)/web_env
   displayName: 'setup virtual environment'
 
 - script: |
