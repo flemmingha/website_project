@@ -10,10 +10,6 @@ pool:
   vmImage: ubuntu-latest
 strategy:
   matrix:
-    Python37:
-      PYTHON_VERSION: '3.7'
-    Python38:
-      PYTHON_VERSION: '3.8'
     Python39:
       PYTHON_VERSION: '3.9'
   maxParallel: 3
@@ -41,20 +37,12 @@ steps:
       print('##vso[task.setvariable variable=projectRoot]{}'.format(project_location))
 
 - script: |
-#     mkdir $(workingDirectory)/web_env
-      python -m venv $(workingDirectory)/web_env
-  displayName: 'setup virtual environment'
-
-- script: |
-      call $(workingDirectory)\web_env\Scripts\activate.bat
-      echo "This is really bad."
-      echo "A big error has occurred!!"
-      exit 45
-  displayName: setup virtual environment
+    python -m venv web_env
+    source $(Build.SourcesDirectory)/Scripts/activate
 
 - script: |
     python -m pip install --upgrade pip setuptools wheel
-    pip install --target="$(workingDirectory)/.python_packages/lib/site-packages" -r requirements.txt
+    pip install -r $(Build.SourcesDirectory)/requirements.txt
     pip install unittest-xml-reporting
   displayName: 'Install prerequisites'
 
@@ -62,6 +50,14 @@ steps:
     pushd '$(projectRoot)'
     python manage.py test --testrunner xmlrunner.extra.djangotestrunner.XMLTestRunner --no-input
   displayName: 'Run tests'
+
+- task: ArchiveFiles@2
+  displayName: 'Archive Application'
+  inputs:
+    rootFolderOrFile: 'django_react_proj'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
 
 - task: PublishTestResults@2
   inputs:
