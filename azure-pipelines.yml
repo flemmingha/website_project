@@ -40,10 +40,10 @@ steps:
       print('Found Django project in', project_location)
       print('##vso[task.setvariable variable=projectRoot]{}'.format(project_location))
 
-#- script: |
-#      mkdir $(workingDirectory)/web_env
-#      python -m venv $(workingDirectory)/web_env
-#  displayName: 'setup virtual environment'
+- script: |
+      mkdir $(workingDirectory)/test
+      python -m venv $(workingDirectory)/test
+  displayName: 'setup virtual environment'
 
 - script: |
       call $(workingDirectory)\web_env\Scripts\activate.bat
