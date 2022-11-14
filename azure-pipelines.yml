@@ -51,11 +51,11 @@ steps:
     python manage.py test --testrunner xmlrunner.extra.djangotestrunner.XMLTestRunner --no-input
   displayName: 'Run tests'
 
-- task: ArchiveFiles@2
-  displayName: 'Archive Application'
-  inputs:
-    rootFolderOrFile: 'django_react_proj'
+steps:
+- script: 'python setup.py sdist'
+  displayName: 'Build sdist'
 
+steps:
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: dist'
   inputs:
