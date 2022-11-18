@@ -5,10 +5,11 @@ class Header extends Component {
     return (
       <div className="text-center">
         <img
-          src="C:\Users\flemm\Desktop\New Website\web_env\django_react_proj\students-fe\public\IMG_2400.JPG"
+          src=".\django_react_proj\students-fe\public\logo192.png"
           width="300"
           className="img-thumbnail"
           style={{ marginTop: "20px" }}
+          alt="what?"
         />
         <hr />
         <h5>

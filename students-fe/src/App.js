@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import Header from "./components/Header";
 import Home from "./components/Home";
+import Info from "./components/Test";
 
 class App extends Component {
   render() {
@@ -8,6 +9,7 @@ class App extends Component {
       <Fragment>
         <Header />
         <Home />
+        <Info />
       </Fragment>
     );
   }
