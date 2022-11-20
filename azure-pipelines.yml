@@ -37,8 +37,9 @@ steps:
       print('##vso[task.setvariable variable=projectRoot]{}'.format(project_location))
 
 - script: |
-    python -m venv web_env
-    source $(Build.SourcesDirectory)/Scripts/activate
+   python -m venv web_env
+   source $(Build.SourcesDirectory)/Scripts/activate
+  displayName: 'Command Line Script'
 
 - script: |
     python -m pip install --upgrade pip setuptools wheel
@@ -50,12 +51,6 @@ steps:
     pushd '$(projectRoot)'
     python manage.py test --testrunner xmlrunner.extra.djangotestrunner.XMLTestRunner --no-input
   displayName: 'Run tests'
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: dist'
-  inputs:
-    PathtoPublish: dist
-    ArtifactName: dist
 
 - task: PublishTestResults@2
   inputs:
