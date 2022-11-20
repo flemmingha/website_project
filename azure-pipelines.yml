@@ -38,7 +38,7 @@ steps:
 
 - script: |
     python -m venv web_env
-    source $(Build.SourcesDirectory)/Scripts/activate
+    source $(Build.SourcesDirectory)/web_env/Scripts/activate
 
 - script: |
     python -m pip install --upgrade pip setuptools wheel
