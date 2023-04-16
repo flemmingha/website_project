@@ -19,7 +19,7 @@ class NewStudentModal extends Component {
     var title = "Editing Student";
     var button = <Button onClick={this.toggle}>Edit</Button>;
     if (create) {
-      title = "Creating New Student";
+      title = "Creating New Student Entry";
 
       button = (
         <Button
@@ -28,7 +28,7 @@ class NewStudentModal extends Component {
           onClick={this.toggle}
           style={{ minWidth: "200px" }}
         >
-          Create New
+          Create New Entry
         </Button>
       );
     }
@@ -53,3 +53,5 @@ class NewStudentModal extends Component {
 }
 
 export default NewStudentModal;
+
+// Du kan kopiere det hele her og genbruge det i den nye app

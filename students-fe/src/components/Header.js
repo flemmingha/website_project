@@ -22,3 +22,5 @@ class Header extends Component {
 }
 
 export default Header;
+
+// Du kan kopiere det hele her og genbruge det i den nye app

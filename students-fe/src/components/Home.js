@@ -26,7 +26,7 @@ class Home extends Component {
 
   render() {
     return (
-      <Container style={{ marginTop: "20px" }}>
+      <Container style={{ marginTop: "30px"}}>
         <Row>
           <Col>
             <StudentList
@@ -46,3 +46,5 @@ class Home extends Component {
 }
 
 export default Home;
+
+// Du kan kopiere det hele her og genbruge det i den nye app

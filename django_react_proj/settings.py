@@ -80,6 +80,8 @@ WSGI_APPLICATION = 'django_react_proj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# Kan du forbinde den til PostGreSQL, lave en API med Django og forbinde den til en front-end med dummy SDTM-data?
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -87,6 +89,7 @@ DATABASES = {
     }
 }
 
+# her ville man skulle tilføje den nye database?
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

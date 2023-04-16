@@ -91,3 +91,5 @@ class NewStudentForm extends React.Component {
 }
 
 export default NewStudentForm;
+
+// Du kan kopiere det hele her og genbruge det i den nye app

@@ -53,3 +53,5 @@ class ConfirmRemovalModal extends Component {
 }
 
 export default ConfirmRemovalModal;
+
+// Du kan kopiere det hele her og genbruge det i den nye app

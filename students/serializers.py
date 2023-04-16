@@ -4,5 +4,8 @@ from .models import Student
 class StudentSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Student 
+        model = Student
         fields = ('pk', 'name', 'email', 'document', 'phone', 'registrationDate')
+
+
+# Her ville man skulle lave en ny serializer som kan serializere modellen

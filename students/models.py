@@ -9,3 +9,6 @@ class Student(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# Her ville man skulle lave en ny model med SDTM data

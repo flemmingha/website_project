@@ -56,3 +56,5 @@ class StudentList extends Component {
 }
 
 export default StudentList;
+
+// Du kan kopiere det hele her og genbruge det i den nye app

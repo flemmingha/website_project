@@ -13,3 +13,5 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunPython(create_data),
     ]
+
+# Her ville man skulle migrere den nye SDTM model til databasen?

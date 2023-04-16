@@ -16,3 +16,5 @@ class App extends Component {
 }
 
 export default App;
+
+// Denne skal kopieres og genbruges i den nye app

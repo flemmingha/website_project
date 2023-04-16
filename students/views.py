@@ -22,12 +22,19 @@ def students_list(request):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['PUT', 'DELETE'])
+@api_view(['GET' ,'PUT', 'DELETE'])
 def students_detail(request, pk):
     try:
         student = Student.objects.get(pk=pk)
     except Student.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        data = Student.objects.get(pk=pk)
+
+        serializer = StudentSerializer(data, context={'request': request}, many=False)
+
+        return Response(serializer.data)
 
     if request.method == 'PUT':
         serializer = StudentSerializer(student, data=request.data,context={'request': request})
@@ -39,3 +46,5 @@ def students_detail(request, pk):
     elif request.method == 'DELETE':
         student.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+# Her ville man skulle lave et nyt API view til SDTM data og metoder
