@@ -36,9 +36,9 @@ steps:
       print('Found Django project in', project_location)
       print('##vso[task.setvariable variable=projectRoot]{}'.format(project_location))
 
-- script: |
-    python -m venv web_env
-    source $(Build.SourcesDirectory)/web_env/Scripts/activate
+#- script: |
+#    python -m venv web_env
+#    source $(Build.SourcesDirectory)/web_env/Scripts/activate
 
 - script: |
     python -m pip install --upgrade pip setuptools wheel
