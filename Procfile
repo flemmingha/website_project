@@ -1,2 +1,2 @@
 #Procfile
-web: gunicorn django_react.wsgi --log-file -
+web: gunicorn django_react_proj.wsgi --log-file -
