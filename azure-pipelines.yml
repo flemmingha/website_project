@@ -51,11 +51,17 @@ steps:
     python manage.py test --testrunner xmlrunner.extra.djangotestrunner.XMLTestRunner --no-input
   displayName: 'Run tests'
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: dist'
+#- task: PublishBuildArtifacts@1
+#  displayName: 'Publish Artifact: dist'
+#  inputs:
+#    PathtoPublish: dist
+#    ArtifactName: dist
+
+- task: PublishPipelineArtifact@0
+  displayName: 'Publish pipeline artifact'
   inputs:
-    PathtoPublish: dist
-    ArtifactName: dist
+    artifactName: 'drop'
+    targetPath: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishTestResults@2
   inputs:
