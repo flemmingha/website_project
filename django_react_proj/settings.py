@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-f88-n92-sw$c@4$@6^*g+x^49mnwl20g67i-u=r_61%v92f@&+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+#Added to use Heroku
 ALLOWED_HOSTS = ['djangoreact-c6228f5fd890.herokuapp.com']
 
 
