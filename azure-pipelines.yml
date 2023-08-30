@@ -57,6 +57,12 @@ steps:
 #    PathtoPublish: dist
 #    ArtifactName: dist
 
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    
 - task: PublishPipelineArtifact@0
   displayName: 'Publish pipeline artifact'
   inputs:
