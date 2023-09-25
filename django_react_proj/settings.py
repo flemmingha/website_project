@@ -29,7 +29,8 @@ DEBUG = True
 #Added to use Heroku
 ALLOWED_HOSTS = [
     'djangoreact-c6228f5fd890.herokuapp.com', 
-                 '127.0.0.1'
+                 '127.0.0.1',
+                 'localhost'
                  ]
 
 
