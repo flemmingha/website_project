@@ -11,9 +11,7 @@ class App extends Component {
       <Fragment>
         <Header />
         <Home />
-        <Test />
         <PersonList />
-        {/* <Api /> */}
       </Fragment>
     );
   }
