@@ -1,0 +1,32 @@
+import axios from "axios";
+import React, { Component } from "react";
+
+const baseURL = "https://jsonplaceholder.typicode.com/posts/1";
+
+
+export default function APIcall() {
+  const [post, setPost] = React.useState(null);
+
+
+  React.useEffect(() => {
+    axios.get(baseURL).then((response) => {
+      setPost(response.data);
+    });
+  }, []);
+
+
+class APIcall extends Component {
+  render() {
+      return (
+        <div className="text-center">
+          <h1>Test af Test</h1>
+          <h1>{post.title}</h1>
+          <p>{post.body}</p>
+        </div>
+      );
+  }
+}
+
+}
+
+//export default Test;
