@@ -12,7 +12,7 @@ class App extends Component {
         <Header />
         <Home />
         <PersonList />
-        {/* <StockQuote /> */}
+         {/* <Stock /> */}
       </Fragment>
     );
   }
