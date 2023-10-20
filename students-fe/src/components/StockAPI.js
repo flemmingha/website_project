@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from 'axios';
+import SaveTicker from './SaveTicker'; // Import the SaveTicker component
 
 const tableStyle = {
   border: '1px solid #ddd',
@@ -55,20 +56,15 @@ class Stock extends Component {
   calculateTotalValue = () => {
     const { openingPrice, quantity } = this.state;
     const totalValueUSD = openingPrice * quantity;
-    
+
     // Example exchange rate from USD to DKK (you can get the latest rates from an exchange rate API)
     const usdToDkkRate = 6.42; // Replace with the actual rate
-    
+
     const totalValueDKK = totalValueUSD * usdToDkkRate;
-    
+
     this.setState({ totalValueUSD, totalValueDKK });
   }
 
-  componentDidMount() {
-    this.fetchData();
-  }
-
-  
   render() {
     return (
       <div>
@@ -79,20 +75,14 @@ class Stock extends Component {
             <option value="AAPL">AAPL</option>
             <option value="GOOGL">GOOGL</option>
             <option value="MSFT">MSFT</option>
-            {/* Add more ticker options as needed */}
           </select>
         </label>
         <label>
           Quantity:
           <input type="number" value={this.state.quantity} onChange={this.handleQuantityChange} />
         </label>
-        
-        {/* Add some space here */}
-        
         <button onClick={this.fetchData}>Fetch Data</button>
-        
-        {/* Add some space here */}
-        
+        <SaveTicker /> {/* Include the SaveTicker component here */}
         <table style={tableStyle}>
           <thead>
             <tr>

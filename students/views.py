@@ -1,8 +1,13 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
+from django.http import JsonResponse
+from django.http import HttpResponse
+from django.middleware.csrf import get_token
+
 
 from .models import Student
+from .models import Ticker  # Import the Ticker model
 from .serializers import *
 
 @api_view(['GET', 'POST'])
@@ -39,3 +44,37 @@ def students_detail(request, pk):
     elif request.method == 'DELETE':
         student.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+#new code for Ticker
+
+
+def save_ticker(request):
+    if request.method == 'POST':
+        selected_ticker = request.POST.get('selected_ticker')
+
+        if selected_ticker:
+            # Create a new Ticker object and save it to the database
+            ticker = Ticker(symbol=selected_ticker)
+            ticker.save()
+
+            return JsonResponse({'message': 'Ticker saved successfully'})
+        else:
+            return JsonResponse({'message': 'Invalid data provided'}, status=400)
+
+    return JsonResponse({'message': 'Invalid request method'}, status=405)  
+
+
+#new code for index
+
+def index(request):
+    return HttpResponse("Welcome to the home page")  # Customize the response as needed
+
+
+#new code for csrf_token
+
+def csrf_token_view(request):
+    # Get the CSRF token
+    csrf_token = get_token(request)
+    return JsonResponse({'csrfToken': csrf_token})
+ 

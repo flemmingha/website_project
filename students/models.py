@@ -9,3 +9,7 @@ class Student(models.Model):
 
     def __str__(self):
         return self.name
+
+    
+class Ticker(models.Model):
+    symbol = models.CharField(max_length=10)
