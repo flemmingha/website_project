@@ -5,16 +5,17 @@ class Header extends Component {
     return (
       <div className="text-center">
         <img
-          src="C:\Users\flemm\Desktop\New Website\web_env\django_react_proj\students-fe\public\IMG_2400.JPG"
-          width="300"
+          src="/1393720.jpg" 
+          alt="stock" 
+          width="500"
           className="img-thumbnail"
           style={{ marginTop: "20px" }}
         />
         <hr />
+        <h1>Portfolio tracker</h1>
         <h5>
-          <i>Workation</i>
+          <i>Portfolio Overview</i>
         </h5>
-        <h1>Kombiner arbejde og ferie i de smukkeste omgivelser</h1>
       </div>
     );
   }
