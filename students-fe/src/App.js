@@ -1,8 +1,7 @@
 import React, { Component, Fragment } from "react";
 import Header from "./components/Header";
 import Home from "./components/Home";
-import Test from "./components/Test";
-import StockAPI from "./components/StockAPI";
+import Stock from "./components/StockAPI";
 import PersonList from "./components/Test";
 
 class App extends Component {
@@ -12,7 +11,7 @@ class App extends Component {
         <Header />
         <Home />
         <PersonList />
-         {/* <Stock /> */}
+          <Stock />
       </Fragment>
     );
   }
