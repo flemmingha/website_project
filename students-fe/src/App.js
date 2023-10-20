@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import Stock from "./components/StockAPI";
-import PersonList from "./components/Test";
+//import PersonList from "./components/Test";
 
 class App extends Component {
   render() {
@@ -10,8 +10,7 @@ class App extends Component {
       <Fragment>
         <Header />
         <Home />
-        <PersonList />
-          <Stock />
+        <Stock />
       </Fragment>
     );
   }
