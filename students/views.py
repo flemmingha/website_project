@@ -71,6 +71,8 @@ def save_ticker(request):
 
 def index(request):
     api_url = reverse('students_api')  # Use the correct name of your URL pattern
+    image_url = '{% static "1393720.jpg" %}'  # Update with your image's path  image_url = '{% static "1393720.jpg" %}' 
+    alt_text = "Welcome image"  # Replace with your alt text
     response_text = f"Welcome to the backend root page - you can access the API interface for students by clicking <a href='http://localhost:8000{api_url}'>here</a>"
     return HttpResponse(response_text)
 

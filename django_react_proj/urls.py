@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.urls import path, re_path
 from students import views
-from students.views import save_ticker  # Import the save_ticker view function
+from students.views import save_ticker  # Import the save_ticker view function'
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,3 +15,6 @@ urlpatterns = [
     path('get-csrf-token/', views.csrf_token_view, name='get_csrf_token'),
     path('api/students/', views.index, name='students_api'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
