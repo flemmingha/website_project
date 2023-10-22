@@ -11,4 +11,5 @@ urlpatterns = [
     # Add a URL pattern for the root path
     path('', views.index),  # Replace 'views.index' with the view you want to use for the root path
     path('get-csrf-token/', views.csrf_token_view, name='get_csrf_token'),
+    path('api/students/', views.index, name='students_api'),
 ]

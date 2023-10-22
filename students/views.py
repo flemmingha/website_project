@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from django.http import JsonResponse
 from django.http import HttpResponse
+from django.urls import reverse
 from django.middleware.csrf import get_token
 
 
@@ -67,9 +68,11 @@ def save_ticker(request):
 
 #new code for index
 
-def index(request):
-    return HttpResponse("Welcome to the home page")  # Customize the response as needed
 
+def index(request):
+    api_url = reverse('students_api')  # Use the correct name of your URL pattern
+    response_text = f"Welcome to the backend root page - you can access the API interface for students by clicking <a href='http://localhost:8000{api_url}'>here</a>"
+    return HttpResponse(response_text)
 
 #new code for csrf_token
 
