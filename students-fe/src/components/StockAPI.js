@@ -75,6 +75,7 @@ class Stock extends Component {
             <option value="AAPL">AAPL</option>
             <option value="GOOGL">GOOGL</option>
             <option value="MSFT">MSFT</option>
+            <option value="AMZN">AMZN</option>
           </select>
         </label>
         <label>
