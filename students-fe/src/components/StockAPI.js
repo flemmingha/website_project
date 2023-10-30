@@ -7,12 +7,18 @@ const tableStyle = {
   borderCollapse: 'collapse',
   width: '50%',
   margin: '0 auto', // Center the table
+  marginTop: '50px', // Adding margin to the top of the container
 };
 
 const cellStyle = {
   border: '1px solid #ddd',
   padding: '8px',
   textAlign: 'center',
+};
+
+const containerStyle = {
+  marginTop: '20px', // Adding margin to the top of the container
+  marginBottom: '20px', // Adding margin to the bottom of the container
 };
 
 class Stock extends Component {
@@ -67,7 +73,7 @@ class Stock extends Component {
 
   render() {
     return (
-      <div>
+      <div style={containerStyle}>
         <h1>Ticker Data</h1>
         <label>
           Select Ticker:
@@ -83,7 +89,7 @@ class Stock extends Component {
           <input type="number" value={this.state.quantity} onChange={this.handleQuantityChange} />
         </label>
         <button onClick={this.fetchData}>Fetch Data</button>
-        <SaveTicker /> {/* Include the SaveTicker component here */}
+        {/* <SaveTicker /> */} {/* Include the SaveTicker component here */}
         <table style={tableStyle}>
           <thead>
             <tr>
