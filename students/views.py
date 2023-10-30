@@ -5,9 +5,14 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from django.urls import reverse
 from django.middleware.csrf import get_token
-
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_POST
+import json
 
 from .models import Student
+from .models import TickerData
 from .models import Ticker  # Import the Ticker model
 from .serializers import *
 
@@ -83,3 +88,17 @@ def csrf_token_view(request):
     csrf_token = get_token(request)
     return JsonResponse({'csrfToken': csrf_token})
  
+class SaveTickerDataView(View):
+    @csrf_exempt
+    def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            new_ticker_data = TickerData(
+                ticker=data.get('ticker'),
+                opening_price=data.get('opening_price'),
+                closing_price=data.get('closing_price')
+            )
+            new_ticker_data.save()
+            return JsonResponse({'message': 'Data saved successfully'})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)

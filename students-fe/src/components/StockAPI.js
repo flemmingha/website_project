@@ -39,25 +39,38 @@ class Stock extends Component {
   handleQuantityChange = (event) => {
     this.setState({ quantity: event.target.value });
   }
+ 
+fetchData = () => {
+  axios.get(`https://api.polygon.io/v2/aggs/ticker/${this.state.selectedTicker}/range/1/day/2023-01-09/2023-01-09?apiKey=wS1qEJjs3M9UE6r8Ca1ovmJp50yt_nie`)
+    .then(res => {
+      const data = res.data;
+      const { ticker, results } = data;
 
-  fetchData = () => {
-    axios.get(`https://api.polygon.io/v2/aggs/ticker/${this.state.selectedTicker}/range/1/day/2023-01-09/2023-01-09?apiKey=wS1qEJjs3M9UE6r8Ca1ovmJp50yt_nie`)
-      .then(res => {
-        const data = res.data;
-        const { ticker, results } = data;
+      if (results.length > 0) {
+        const lastResult = results[results.length - 1];
+        const openingPrice = lastResult.o;
+        const closingPrice = lastResult.c;
 
-        if (results.length > 0) {
-          const lastResult = results[results.length - 1]; // Get the last data point
-          const openingPrice = lastResult.o;
-          const closingPrice = lastResult.c;
+        this.setState({ ticker, openingPrice, closingPrice }, this.calculateTotalValue);
 
-          this.setState({ ticker, openingPrice, closingPrice }, this.calculateTotalValue);
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }
+        // Sending the fetched data to Django backend
+        axios.post('http://localhost:8000//save-ticker-data/', {
+          ticker,
+          opening_price: openingPrice,
+          closing_price: closingPrice
+        })
+        .then(response => {
+          // Handle success if needed
+        })
+        .catch(error => {
+          console.error('Error saving data to Django:', error);
+        });
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+}
 
   calculateTotalValue = () => {
     const { openingPrice, quantity } = this.state;
@@ -69,6 +82,23 @@ class Stock extends Component {
     const totalValueDKK = totalValueUSD * usdToDkkRate;
 
     this.setState({ totalValueUSD, totalValueDKK });
+  }
+
+  saveData = () => {
+    const { ticker, openingPrice, closingPrice } = this.state;
+
+    axios.post('http://localhost:8000/save-ticker-data/', {
+      ticker,
+      opening_price: openingPrice,
+      closing_price: closingPrice
+    })
+    .then(response => {
+      // Handle success if needed
+      console.log('Data saved successfully');
+    })
+    .catch(error => {
+      console.error('Error saving data to Django:', error);
+    });
   }
 
   render() {
@@ -89,6 +119,7 @@ class Stock extends Component {
           <input type="number" value={this.state.quantity} onChange={this.handleQuantityChange} />
         </label>
         <button onClick={this.fetchData}>Fetch Data</button>
+        <button onClick={this.saveData}>Save</button> {/* New button to save data */}
         {/* <SaveTicker /> */} {/* Include the SaveTicker component here */}
         <table style={tableStyle}>
           <thead>
