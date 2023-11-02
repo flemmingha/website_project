@@ -32,6 +32,28 @@ class Stock extends Component {
     totalValueDKK: 0, // Total value in DKK
   }
 
+    // Custom Axios instance with CSRF token header
+    axiosInstance = axios.create();
+
+   // Fetch CSRF token from Django backend
+   fetchCSRFToken = () => {
+    axios.get('http://localhost:8000/get-csrf-token/')
+      .then(response => {
+        const csrftoken = response.data.csrftoken;
+        // Set CSRF token for all Axios requests
+        axios.defaults.headers.common['X-CSRFTOKEN'] = csrftoken;
+      })
+      .catch(error => {
+        console.error('Error fetching CSRF token:', error);
+      });
+  }
+
+  // Call fetchCSRFToken when the component mounts
+  componentDidMount() {
+    this.fetchCSRFToken();
+  }
+
+
   handleTickerChange = (event) => {
     this.setState({ selectedTicker: event.target.value });
   }
@@ -40,9 +62,10 @@ class Stock extends Component {
     this.setState({ quantity: event.target.value });
   }
  
-fetchData = () => {
-  axios.get(`https://api.polygon.io/v2/aggs/ticker/${this.state.selectedTicker}/range/1/day/2023-01-09/2023-01-09?apiKey=wS1qEJjs3M9UE6r8Ca1ovmJp50yt_nie`)
-    .then(res => {
+  fetchData = () => {
+    // Use the custom Axios instance for fetching data
+    this.axiosInstance.get(`https://api.polygon.io/v2/aggs/ticker/${this.state.selectedTicker}/range/1/day/2023-01-09/2023-01-09?apiKey=wS1qEJjs3M9UE6r8Ca1ovmJp50yt_nie`)
+      .then(res => {
       const data = res.data;
       const { ticker, results } = data;
 
@@ -52,19 +75,6 @@ fetchData = () => {
         const closingPrice = lastResult.c;
 
         this.setState({ ticker, openingPrice, closingPrice }, this.calculateTotalValue);
-
-        // Sending the fetched data to Django backend
-        axios.post('http://localhost:8000//save-ticker-data/', {
-          ticker,
-          opening_price: openingPrice,
-          closing_price: closingPrice
-        })
-        .then(response => {
-          // Handle success if needed
-        })
-        .catch(error => {
-          console.error('Error saving data to Django:', error);
-        });
       }
     })
     .catch(error => {
@@ -86,20 +96,24 @@ fetchData = () => {
 
   saveData = () => {
     const { ticker, openingPrice, closingPrice } = this.state;
-
-    axios.post('http://localhost:8000/save-ticker-data/', {
+  
+    this.axiosInstance.post('http://localhost:8000/save-ticker-data/', {
       ticker,
       opening_price: openingPrice,
       closing_price: closingPrice
     })
-    .then(response => {
-      // Handle success if needed
-      console.log('Data saved successfully');
-    })
-    .catch(error => {
-      console.error('Error saving data to Django:', error);
-    });
+      .then(response => {
+        console.log('Data saved successfully', response); // Log the response
+      })
+      .catch(error => {
+        console.error('Error saving data to Django:', error);
+        if (error.response) {
+          console.error('Response status:', error.response.status);
+          console.error('Response data:', error.response.data);
+        }
+      });
   }
+  
 
   render() {
     return (
@@ -120,7 +134,7 @@ fetchData = () => {
         </label>
         <button onClick={this.fetchData}>Fetch Data</button>
         <button onClick={this.saveData}>Save</button> {/* New button to save data */}
-        {/* <SaveTicker /> */} {/* Include the SaveTicker component here */}
+        {/* <SaveTicker /> Include the SaveTicker component here */}
         <table style={tableStyle}>
           <thead>
             <tr>

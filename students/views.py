@@ -88,6 +88,9 @@ def csrf_token_view(request):
     csrf_token = get_token(request)
     return JsonResponse({'csrfToken': csrf_token})
  
+def get_csrf_token(request):
+    return JsonResponse({'csrftoken': get_token(request)})
+
 class SaveTickerDataView(View):
     @csrf_exempt
     def post(self, request, *args, **kwargs):
