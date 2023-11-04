@@ -59,15 +59,25 @@ def save_ticker(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
+            print("Received data:", data)  # Debug statement to print received data
+
             ticker = data.get('ticker')
             opening_price = data.get('opening_price')
             closing_price = data.get('closing_price')
+            quantity = data.get('quantity')
 
-            if ticker and opening_price is not None and closing_price is not None:
+            if ticker and opening_price is not None and closing_price is not None and quantity is not None:
+                # Calculate total values
+                total_value_usd = opening_price * quantity
+                total_value_dkk = total_value_usd * 6.42  # Example exchange rate from USD to DKK
+
                 new_ticker_data = TickerData(
                     ticker=ticker,
                     opening_price=opening_price,
-                    closing_price=closing_price
+                    closing_price=closing_price,
+                    total_value_usd=total_value_usd,
+                    total_value_dkk=total_value_dkk,
+                    quantity=quantity
                 )
                 new_ticker_data.save()
                 return JsonResponse({'message': 'Ticker data saved successfully'})
@@ -75,9 +85,10 @@ def save_ticker(request):
                 return JsonResponse({'message': 'Incomplete or invalid data provided'}, status=400)
         except json.JSONDecodeError as e:
             return JsonResponse({'message': 'Invalid JSON data format'}, status=400)
+        except Exception as e:
+            return JsonResponse({'message': 'An error occurred while saving the data'}, status=500)
 
     return JsonResponse({'message': 'Invalid request method'}, status=405)
-
 #new code for index
 
 
@@ -103,12 +114,29 @@ class SaveTickerDataView(View):
     def post(self, request, *args, **kwargs):
         try:
             data = json.loads(request.body)
-            new_ticker_data = TickerData(
-                ticker=data.get('ticker'),
-                opening_price=data.get('opening_price'),
-                closing_price=data.get('closing_price')
-            )
-            new_ticker_data.save()
-            return JsonResponse({'message': 'Data saved successfully'})
+            ticker = data.get('ticker')
+            opening_price = data.get('opening_price')
+            closing_price = data.get('closing_price')
+            quantity = data.get('quantity')
+
+            if ticker and opening_price is not None and closing_price is not None and quantity is not None:
+                # Calculate total values
+                total_value_usd = opening_price * quantity
+                total_value_dkk = total_value_usd * 6.42  # Example exchange rate from USD to DKK
+
+                new_ticker_data = TickerData(
+                    ticker=ticker,
+                    opening_price=opening_price,
+                    closing_price=closing_price,
+                    total_value_usd=total_value_usd,
+                    total_value_dkk=total_value_dkk,
+                    quantity=quantity
+                )
+                new_ticker_data.save()
+                return JsonResponse({'message': 'Data saved successfully'})
+            else:
+                return JsonResponse({'message': 'Incomplete or invalid data provided'}, status=400)
+        except json.JSONDecodeError as e:
+            return JsonResponse({'message': 'Invalid JSON data format'}, status=400)
         except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
+            return JsonResponse({'message': 'An error occurred while saving the data'}, status=500)

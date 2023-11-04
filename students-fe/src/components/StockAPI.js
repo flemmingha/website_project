@@ -93,29 +93,31 @@ class Stock extends Component {
 
     this.setState({ totalValueUSD, totalValueDKK });
   }
+  
   saveData = () => {
-    const { ticker, openingPrice, closingPrice } = this.state;
+    const { ticker, openingPrice, closingPrice, quantity, totalValueUSD, totalValueDKK } = this.state;
   
     const csrftoken = document.cookie
       .split('; ')
       .find(cookie => cookie.startsWith('csrftoken='))
       .split('=')[1];
   
+      const requestData = {
+        ticker,
+        opening_price: openingPrice,
+        closing_price: closingPrice,
+        quantity: parseInt(quantity), // Ensure it's sent as an integer
+        total_value_usd: totalValueUSD,
+        total_value_dkk: totalValueDKK
+      };
+  
     // Log the request data before sending
-    console.log('Request Data:', {
-      ticker,
-      opening_price: openingPrice,
-      closing_price: closingPrice
-    });
+    console.log('Request Data:', requestData);
   
     // Send a POST request with the CSRF token in the headers
     this.axiosInstance.post(
       'http://localhost:8000/save_ticker/', // Make sure the URL is correctly set
-      {
-        ticker,
-        opening_price: openingPrice,
-        closing_price: closingPrice
-      },
+      requestData,
       {
         headers: {
           'X-CSRFToken': csrftoken
