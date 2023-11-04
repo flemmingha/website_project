@@ -93,17 +93,37 @@ class Stock extends Component {
 
     this.setState({ totalValueUSD, totalValueDKK });
   }
-
   saveData = () => {
     const { ticker, openingPrice, closingPrice } = this.state;
   
-    this.axiosInstance.post('http://localhost:8000/save-ticker-data/', {
+    const csrftoken = document.cookie
+      .split('; ')
+      .find(cookie => cookie.startsWith('csrftoken='))
+      .split('=')[1];
+  
+    // Log the request data before sending
+    console.log('Request Data:', {
       ticker,
       opening_price: openingPrice,
       closing_price: closingPrice
-    })
+    });
+  
+    // Send a POST request with the CSRF token in the headers
+    this.axiosInstance.post(
+      'http://localhost:8000/save_ticker/', // Make sure the URL is correctly set
+      {
+        ticker,
+        opening_price: openingPrice,
+        closing_price: closingPrice
+      },
+      {
+        headers: {
+          'X-CSRFToken': csrftoken
+        }
+      }
+    )
       .then(response => {
-        console.log('Data saved successfully', response); // Log the response
+        console.log('Data saved successfully', response);
       })
       .catch(error => {
         console.error('Error saving data to Django:', error);

@@ -54,22 +54,29 @@ def students_detail(request, pk):
 
 #new code for Ticker
 
-
+@csrf_exempt
 def save_ticker(request):
     if request.method == 'POST':
-        selected_ticker = request.POST.get('selected_ticker')
+        try:
+            data = json.loads(request.body)
+            ticker = data.get('ticker')
+            opening_price = data.get('opening_price')
+            closing_price = data.get('closing_price')
 
-        if selected_ticker:
-            # Create a new Ticker object and save it to the database
-            ticker = Ticker(symbol=selected_ticker)
-            ticker.save()
+            if ticker and opening_price is not None and closing_price is not None:
+                new_ticker_data = TickerData(
+                    ticker=ticker,
+                    opening_price=opening_price,
+                    closing_price=closing_price
+                )
+                new_ticker_data.save()
+                return JsonResponse({'message': 'Ticker data saved successfully'})
+            else:
+                return JsonResponse({'message': 'Incomplete or invalid data provided'}, status=400)
+        except json.JSONDecodeError as e:
+            return JsonResponse({'message': 'Invalid JSON data format'}, status=400)
 
-            return JsonResponse({'message': 'Ticker saved successfully'})
-        else:
-            return JsonResponse({'message': 'Invalid data provided'}, status=400)
-
-    return JsonResponse({'message': 'Invalid request method'}, status=405)  
-
+    return JsonResponse({'message': 'Invalid request method'}, status=405)
 
 #new code for index
 
