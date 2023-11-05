@@ -1,3 +1,5 @@
+//next step, divide the fetch data and the save data into two different parts
+
 import React, { Component } from "react";
 import axios from 'axios';
 import SaveTicker from './SaveTicker'; // Import the SaveTicker component
