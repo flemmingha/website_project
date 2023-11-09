@@ -1,15 +1,14 @@
-//next step, divide the fetch data and the save data into two different parts
-
 import React, { Component } from "react";
 import axios from 'axios';
-import SaveTicker from './SaveTicker'; // Import the SaveTicker component
+import FetchData from './FetchData';
+import SaveData from './SaveData';
 
 const tableStyle = {
   border: '1px solid #ddd',
   borderCollapse: 'collapse',
   width: '50%',
-  margin: '0 auto', // Center the table
-  marginTop: '50px', // Adding margin to the top of the container
+  margin: '0 auto',
+  marginTop: '50px',
 };
 
 const cellStyle = {
@@ -19,8 +18,8 @@ const cellStyle = {
 };
 
 const containerStyle = {
-  marginTop: '20px', // Adding margin to the top of the container
-  marginBottom: '20px', // Adding margin to the bottom of the container
+  marginTop: '20px',
+  marginBottom: '20px',
 };
 
 class Stock extends Component {
@@ -28,33 +27,11 @@ class Stock extends Component {
     ticker: '',
     openingPrice: '',
     closingPrice: '',
-    selectedTicker: 'AAPL', // Default selected ticker
-    quantity: 1, // Default quantity
-    totalValueUSD: 0, // Total value in USD
-    totalValueDKK: 0, // Total value in DKK
-  }
-
-    // Custom Axios instance with CSRF token header
-    axiosInstance = axios.create();
-
-   // Fetch CSRF token from Django backend
-   fetchCSRFToken = () => {
-    axios.get('http://localhost:8000/get-csrf-token/')
-      .then(response => {
-        const csrftoken = response.data.csrftoken;
-        // Set CSRF token for all Axios requests
-        axios.defaults.headers.common['X-CSRFTOKEN'] = csrftoken;
-      })
-      .catch(error => {
-        console.error('Error fetching CSRF token:', error);
-      });
-  }
-
-  // Call fetchCSRFToken when the component mounts
-  componentDidMount() {
-    this.fetchCSRFToken();
-  }
-
+    selectedTicker: 'AAPL',
+    quantity: 1,
+    totalValueUSD: 0,
+    totalValueDKK: 0,
+  };
 
   handleTickerChange = (event) => {
     this.setState({ selectedTicker: event.target.value });
@@ -63,81 +40,19 @@ class Stock extends Component {
   handleQuantityChange = (event) => {
     this.setState({ quantity: event.target.value });
   }
- 
-  fetchData = () => {
-    // Use the custom Axios instance for fetching data
-    this.axiosInstance.get(`https://api.polygon.io/v2/aggs/ticker/${this.state.selectedTicker}/range/1/day/2023-01-09/2023-01-09?apiKey=wS1qEJjs3M9UE6r8Ca1ovmJp50yt_nie`)
-      .then(res => {
-      const data = res.data;
-      const { ticker, results } = data;
 
-      if (results.length > 0) {
-        const lastResult = results[results.length - 1];
-        const openingPrice = lastResult.o;
-        const closingPrice = lastResult.c;
-
-        this.setState({ ticker, openingPrice, closingPrice }, this.calculateTotalValue);
-      }
-    })
-    .catch(error => {
-      console.error('Error fetching data:', error);
-    });
-}
+  updateData = (data) => {
+    this.setState(data, this.calculateTotalValue);
+  }
 
   calculateTotalValue = () => {
     const { openingPrice, quantity } = this.state;
     const totalValueUSD = openingPrice * quantity;
-
-    // Example exchange rate from USD to DKK (you can get the latest rates from an exchange rate API)
-    const usdToDkkRate = 6.42; // Replace with the actual rate
-
+    const usdToDkkRate = 6.42;
     const totalValueDKK = totalValueUSD * usdToDkkRate;
 
     this.setState({ totalValueUSD, totalValueDKK });
   }
-  
-  saveData = () => {
-    const { ticker, openingPrice, closingPrice, quantity, totalValueUSD, totalValueDKK } = this.state;
-  
-    const csrftoken = document.cookie
-      .split('; ')
-      .find(cookie => cookie.startsWith('csrftoken='))
-      .split('=')[1];
-  
-      const requestData = {
-        ticker,
-        opening_price: openingPrice,
-        closing_price: closingPrice,
-        quantity: parseInt(quantity), // Ensure it's sent as an integer
-        total_value_usd: totalValueUSD,
-        total_value_dkk: totalValueDKK
-      };
-  
-    // Log the request data before sending
-    console.log('Request Data:', requestData);
-  
-    // Send a POST request with the CSRF token in the headers
-    this.axiosInstance.post(
-      'http://localhost:8000/save_ticker/', // Make sure the URL is correctly set
-      requestData,
-      {
-        headers: {
-          'X-CSRFToken': csrftoken
-        }
-      }
-    )
-      .then(response => {
-        console.log('Data saved successfully', response);
-      })
-      .catch(error => {
-        console.error('Error saving data to Django:', error);
-        if (error.response) {
-          console.error('Response status:', error.response.status);
-          console.error('Response data:', error.response.data);
-        }
-      });
-  }
-  
 
   render() {
     return (
@@ -156,9 +71,8 @@ class Stock extends Component {
           Quantity:
           <input type="number" value={this.state.quantity} onChange={this.handleQuantityChange} />
         </label>
-        <button onClick={this.fetchData}>Fetch Data</button>
-        <button onClick={this.saveData}>Save</button> {/* New button to save data */}
-        {/* <SaveTicker /> Include the SaveTicker component here */}
+        <FetchData selectedTicker={this.state.selectedTicker} updateData={this.updateData} />
+        <SaveData data={this.state} />
         <table style={tableStyle}>
           <thead>
             <tr>
