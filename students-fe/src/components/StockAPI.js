@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import axios from 'axios';
 import FetchData from './FetchData';
 import SaveData from './SaveData';
+import ExchangeRateFetcher from './ExchangeRateFetcher'; // New component for fetching exchange rate
+
 
 const tableStyle = {
   border: '1px solid #ddd',
@@ -46,18 +48,21 @@ class StockAPI extends Component {
   }
 
   calculateTotalValue = () => {
-    const { openingPrice, quantity } = this.state;
+    const { openingPrice, quantity, usdToDkkRate } = this.state;
     const totalValueUSD = openingPrice * quantity;
-    const usdToDkkRate = 6.42;
+  
     const totalValueDKK = totalValueUSD * usdToDkkRate;
-
+  
     this.setState({ totalValueUSD, totalValueDKK });
   }
-
+  
   render() {
     return (
       <div style={containerStyle}>
         <h1>Ticker Data</h1>
+        <ExchangeRateFetcher // Component to fetch the exchange rate
+          setExchangeRate={(usdToDkkRate) => this.setState({ usdToDkkRate }, this.calculateTotalValue)}
+        />
         <label>
           Select Ticker:
           <select value={this.state.selectedTicker} onChange={this.handleTickerChange}>
