@@ -51,7 +51,26 @@ def students_detail(request, pk):
         student.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
+@require_POST
+@csrf_exempt
+def save_exchange_rate(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            exchange_rate = data.get('exchangeRate')
 
+            if exchange_rate is not None:
+                # Process the received exchange rate, save to the database, or perform calculations
+                # Your processing logic here
+
+                return JsonResponse({'message': 'Exchange rate received and processed successfully'})
+            else:
+                return JsonResponse({'message': 'Invalid or missing exchange rate data'}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'Invalid JSON data format'}, status=400)
+    else:
+        return JsonResponse({'message': 'Invalid request method'}, status=405)
+    
 #new code for Ticker
 
 @csrf_exempt

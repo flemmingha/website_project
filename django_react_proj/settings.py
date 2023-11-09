@@ -67,6 +67,26 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Your frontend's address
+    "http://localhost:8000",  # Your backend's address
+]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',  # For preflight requests
+    'PATCH',
+    'POST',
+    'PUT',
+]
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'content-type',  # Include necessary headers for your requests
+    'x-csrftoken',
+]
+
 ROOT_URLCONF = 'django_react_proj.urls'
 
 TEMPLATES = [

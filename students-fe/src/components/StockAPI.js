@@ -33,6 +33,7 @@ class StockAPI extends Component {
     quantity: 1,
     totalValueUSD: 0,
     totalValueDKK: 0,
+    usdToDkkRate: 6.42, // Set an initial value for USD to DKK rate
   };
 
   handleTickerChange = (event) => {
@@ -41,6 +42,12 @@ class StockAPI extends Component {
 
   handleQuantityChange = (event) => {
     this.setState({ quantity: event.target.value });
+  }
+
+  setExchangeRate = (usdToDkkRate) => {
+    this.setState({ usdToDkkRate }, () => {
+      this.calculateTotalValue(); // Call the function as a callback to ensure it uses the updated state
+    });
   }
 
   updateData = (data) => {
@@ -60,9 +67,7 @@ class StockAPI extends Component {
     return (
       <div style={containerStyle}>
         <h1>Ticker Data</h1>
-        <ExchangeRateFetcher // Component to fetch the exchange rate
-          setExchangeRate={(usdToDkkRate) => this.setState({ usdToDkkRate }, this.calculateTotalValue)}
-        />
+        <ExchangeRateFetcher setExchangeRate={this.setExchangeRate} />
         <label>
           Select Ticker:
           <select value={this.state.selectedTicker} onChange={this.handleTickerChange}>

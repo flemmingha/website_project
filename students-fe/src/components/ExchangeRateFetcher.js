@@ -1,46 +1,47 @@
 import React, { Component } from "react";
+import axios from 'axios';
 
 const API_KEY = '2wU33OCwTwVUmNdlI3qOndGcQLadehhS';
-const EXCHANGE_RATE_API_URL = `http://api.apilayer.com/currency_data/live?source=USD&currencies=DKK&apikey=${API_KEY}`;
+const EXCHANGE_RATE_API_URL = `http://api.apilayer.com/currency_data/live?source=USD&currencies=DKK`;
 
 class ExchangeRateFetcher extends Component {
   state = {
-    exchangeRate: null, // State to store the fetched exchange rate
-    loading: true, // State to track loading status
+    exchangeRate: null,
   };
 
   componentDidMount() {
-    // Fetch the exchange rate when the component mounts
-    fetch(EXCHANGE_RATE_API_URL, {
-      method: 'GET',
-      headers: {
-        'apikey': API_KEY,
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      const exchangeRate = data.exchange_rate.DKK; // Assuming the structure of the API response
-      this.setState({ exchangeRate, loading: false });
-    })
-    .catch(error => {
-      // Handle errors if the exchange rate cannot be fetched
-      console.error('Error fetching exchange rate:', error);
-      this.setState({ loading: false });
-    });
+    axios
+      .get('http://api.apilayer.com/currency_data/live?source=USD&currencies=DKK', {
+        headers: { 'apikey': API_KEY },
+      })
+      .then((response) => {
+        const usdToDkkRate = response.data.quotes.USDDKK;
+        if (!isNaN(usdToDkkRate)) {
+          this.setState({ exchangeRate: usdToDkkRate });
+          this.sendExchangeRate(usdToDkkRate);
+        } else {
+          console.error('Invalid exchange rate:', usdToDkkRate);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching exchange rate:', error);
+      });
   }
 
-  render() {
-    const { exchangeRate, loading } = this.state;
+  sendExchangeRate = (exchangeRate) => {
+    axios
+      .post('http://localhost:8000/save_exchange_rate', { exchangeRate }) // Adjust the URL to your backend
+      .then((response) => {
+        console.log('Exchange rate sent to the backend:', response.data);
+      })
+      .catch((error) => {
+        console.error('Error sending exchange rate to the backend:', error);
+      });
+  };
 
-    return (
-      <div>
-        {loading ? (
-          <p>Loading exchange rate...</p>
-        ) : (
-          <p>Exchange Rate: {exchangeRate}</p>
-        )}
-      </div>
-    );
+  render() {
+    // Your rendering logic, such as loaders or UI elements
+    return <div>{/* Loader or UI elements */}</div>;
   }
 }
 
