@@ -16,7 +16,6 @@ function SaveData({ data }) {
       total_value_dkk: totalValueDKK,
     };
 
-    // Use your endpoint URL here
     axiosInstance.post('http://localhost:8000/save_ticker/', requestData)
       .then(response => {
         console.log('Data saved successfully', response);

@@ -22,7 +22,7 @@ const containerStyle = {
   marginBottom: '20px',
 };
 
-class Stock extends Component {
+class StockAPI extends Component {
   state = {
     ticker: '',
     openingPrice: '',
@@ -98,4 +98,4 @@ class Stock extends Component {
   }
 }
 
-export default Stock;
+export default StockAPI;
