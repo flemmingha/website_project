@@ -10,6 +10,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_POST
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 from .models import Student
 from .models import TickerData
@@ -60,6 +63,9 @@ def save_exchange_rate(request):
             exchange_rate = data.get('exchangeRate')
 
             if exchange_rate is not None:
+                # Log the received exchange rate
+                logger.info('Received exchange rate: %s', exchange_rate)
+
                 # Process the received exchange rate, save to the database, or perform calculations
                 # Your processing logic here
 
@@ -72,6 +78,7 @@ def save_exchange_rate(request):
         return JsonResponse({'message': 'Invalid request method'}, status=405)
     
 #new code for Ticker
+from decimal import Decimal  # Import Decimal for precise decimal arithmetic
 
 @csrf_exempt
 def save_ticker(request):
@@ -84,11 +91,12 @@ def save_ticker(request):
             opening_price = data.get('opening_price')
             closing_price = data.get('closing_price')
             quantity = data.get('quantity')
+            exchange_rate = data.get('exchange_rate')  # Add this line to get the exchange rate
 
-            if ticker and opening_price is not None and closing_price is not None and quantity is not None:
-                # Calculate total values
+            if ticker and opening_price is not None and closing_price is not None and quantity is not None and exchange_rate is not None:
+                # Calculate total values using the dynamic exchange rate
                 total_value_usd = opening_price * quantity
-                total_value_dkk = total_value_usd * 6.42  # Example exchange rate from USD to DKK
+                total_value_dkk = Decimal(total_value_usd) * Decimal(exchange_rate)
 
                 new_ticker_data = TickerData(
                     ticker=ticker,
@@ -108,6 +116,7 @@ def save_ticker(request):
             return JsonResponse({'message': 'An error occurred while saving the data'}, status=500)
 
     return JsonResponse({'message': 'Invalid request method'}, status=405)
+
 #new code for index
 
 

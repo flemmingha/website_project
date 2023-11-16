@@ -11,14 +11,13 @@ class ExchangeRateFetcher extends Component {
 
   componentDidMount() {
     axios
-      .get('http://api.apilayer.com/currency_data/live?source=USD&currencies=DKK', {
-        headers: { 'apikey': API_KEY },
-      })
+      .get(EXCHANGE_RATE_API_URL, { headers: { 'apikey': API_KEY } })
       .then((response) => {
         const usdToDkkRate = response.data.quotes.USDDKK;
         if (!isNaN(usdToDkkRate)) {
           this.setState({ exchangeRate: usdToDkkRate });
-          this.sendExchangeRate(usdToDkkRate);
+          this.props.setExchangeRate(usdToDkkRate); // Ensure that this is being called correctly
+          console.log('Exchange rate set in ExchangeRateFetcher:', usdToDkkRate);
         } else {
           console.error('Invalid exchange rate:', usdToDkkRate);
         }
@@ -27,17 +26,6 @@ class ExchangeRateFetcher extends Component {
         console.error('Error fetching exchange rate:', error);
       });
   }
-
-  sendExchangeRate = (exchangeRate) => {
-    axios
-      .post('http://localhost:8000/save_exchange_rate', { exchangeRate }) // Adjust the URL to your backend
-      .then((response) => {
-        console.log('Exchange rate sent to the backend:', response.data);
-      })
-      .catch((error) => {
-        console.error('Error sending exchange rate to the backend:', error);
-      });
-  };
 
   render() {
     // Your rendering logic, such as loaders or UI elements

@@ -57,7 +57,6 @@ class StockAPI extends Component {
   calculateTotalValue = () => {
     const { openingPrice, quantity, usdToDkkRate } = this.state;
     const totalValueUSD = openingPrice * quantity;
-  
     const totalValueDKK = totalValueUSD * usdToDkkRate;
   
     this.setState({ totalValueUSD, totalValueDKK });

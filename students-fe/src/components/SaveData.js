@@ -14,6 +14,7 @@ function SaveData({ data }) {
       quantity: parseInt(quantity),
       total_value_usd: totalValueUSD,
       total_value_dkk: totalValueDKK,
+      exchange_rate: data.usdToDkkRate,  // Add exchange rate to the request data
     };
 
     axiosInstance.post('http://localhost:8000/save_ticker/', requestData)
