@@ -8,8 +8,8 @@ class App extends Component {
   render() {
     return (
       <Fragment>
-        <Header />
-        <Home />
+        {/* <Header /> */}
+        {/* <Home /> */}
         <StockAPI />
       </Fragment>
     );

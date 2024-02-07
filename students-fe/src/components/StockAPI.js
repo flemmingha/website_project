@@ -65,7 +65,7 @@ class StockAPI extends Component {
   render() {
     return (
       <div style={containerStyle}>
-        <h1>Ticker Data</h1>
+        <h1>Fetch and save ticker data</h1>
         <ExchangeRateFetcher setExchangeRate={this.setExchangeRate} />
         <label>
           Select Ticker:
